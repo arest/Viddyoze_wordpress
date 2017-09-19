@@ -17,7 +17,7 @@ export const QuoteList = (props) => (
     <List {...props}>
         <Datagrid>
             <TextField source="id" />
-            <TextField source="author.lastName" label="Author" />
+            <TextField source="author.lastName" label="Author" sortable={false} />
             <TextField source="content" />
             <EditButton />
         </Datagrid>

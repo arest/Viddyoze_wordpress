@@ -1,6 +1,6 @@
 // in src/posts.js
 import React from 'react';
-import { List, Edit, Create, Datagrid, TextField, EmailField, EditButton, DisabledInput, TextInput, ReferenceInput, SelectInput, SimpleForm } from 'admin-on-rest';
+import { List, Edit, Create, Datagrid, TextField, EmailField, EditButton, DisabledInput, TextInput, SimpleForm } from 'admin-on-rest';
 
 const validateCreation = (values) => {
     const errors = {};

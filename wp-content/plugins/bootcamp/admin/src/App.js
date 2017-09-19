@@ -1,7 +1,7 @@
 /* global baseUrl */
 /* global apiKey */
 import React from 'react';
-import { jsonServerRestClient, simpleRestClient, fetchUtils, Admin, Resource, Delete } from 'admin-on-rest';
+import { jsonServerRestClient, fetchUtils, Admin, Resource, Delete } from 'admin-on-rest';
 
 import { QuoteList, QuoteEdit, QuoteCreate } from './quotes';
 import { AuthorList, AuthorEdit, AuthorCreate } from './authors';
