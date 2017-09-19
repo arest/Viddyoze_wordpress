@@ -33,7 +33,7 @@ export const AuthorList = (props) => (
 
 
 const AuthorTitle = ({ record }) => {
-    return <span>Author {record ? `"${record.lastName}"` : ''}</span>;
+    return <span>Author {record ? `"${record.lastName}"` : 'creation'}</span>;
 };
 
 export const AuthorEdit = (props) => (

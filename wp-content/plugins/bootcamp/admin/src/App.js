@@ -1,10 +1,11 @@
 /* global baseUrl */
 /* global apiKey */
 import React from 'react';
-import { jsonServerRestClient, simpleRestClient, fetchUtils, Admin, Resource } from 'admin-on-rest';
+import { jsonServerRestClient, simpleRestClient, fetchUtils, Admin, Resource, Delete } from 'admin-on-rest';
 
 import { QuoteList, QuoteEdit, QuoteCreate } from './quotes';
 import { AuthorList, AuthorEdit, AuthorCreate } from './authors';
+import Dashboard from './dashboard';
 
 const httpClient = (url, options = {}) => {
     if (!options.headers) {
@@ -18,9 +19,9 @@ const httpClient = (url, options = {}) => {
 const restClient = jsonServerRestClient(baseUrl, httpClient);
 
 const App = () => (
-    <Admin restClient={restClient}>
-        <Resource name="quote" list={QuoteList} edit={QuoteEdit} create={QuoteCreate} />
-        <Resource name="author" list={AuthorList} edit={AuthorEdit} create={AuthorCreate} />
+    <Admin dashboard={Dashboard} restClient={restClient} title="Bootcamp plugin">
+        <Resource name="quote" list={QuoteList} edit={QuoteEdit} create={QuoteCreate} remove={Delete} />
+        <Resource name="author" list={AuthorList} edit={AuthorEdit} create={AuthorCreate} remove={Delete} />
     </Admin>
 );
 
