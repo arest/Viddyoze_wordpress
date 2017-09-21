@@ -48,60 +48,34 @@ function add_base_url() {
     echo '<script> var bootcampBaseUrl="'.$baseUrl.'";</script>';
 }
 
-function bootcamp_front_init() {
 
-	$labels = array(
-		'name'               => _x( 'Books', 'post type general name', 'your-plugin-textdomain' ),
-		'singular_name'      => _x( 'Book', 'post type singular name', 'your-plugin-textdomain' ),
-		'menu_name'          => _x( 'Books', 'admin menu', 'your-plugin-textdomain' ),
-		'name_admin_bar'     => _x( 'Book', 'add new on admin bar', 'your-plugin-textdomain' ),
-		'add_new'            => _x( 'Add New', 'book', 'your-plugin-textdomain' ),
-		'add_new_item'       => __( 'Add New Book', 'your-plugin-textdomain' ),
-		'new_item'           => __( 'New Book', 'your-plugin-textdomain' ),
-		'edit_item'          => __( 'Edit Book', 'your-plugin-textdomain' ),
-		'view_item'          => __( 'View Book', 'your-plugin-textdomain' ),
-		'all_items'          => __( 'All Books', 'your-plugin-textdomain' ),
-		'search_items'       => __( 'Search Books', 'your-plugin-textdomain' ),
-		'parent_item_colon'  => __( 'Parent Books:', 'your-plugin-textdomain' ),
-		'not_found'          => __( 'No books found.', 'your-plugin-textdomain' ),
-		'not_found_in_trash' => __( 'No books found in Trash.', 'your-plugin-textdomain' )
-	);
+class BootcampQuotes
+{
+	protected $baseUrl;
 
-	$args = array(
-		'labels'             => $labels,
-                'description'        => __( 'Description.', 'your-plugin-textdomain' ),
-		'public'             => true,
-		'publicly_queryable' => true,
-		'show_ui'            => true,
-		'show_in_menu'       => true,
-		'query_var'          => true,
-		'rewrite'            => array( 'slug' => 'book' ),
-		'capability_type'    => 'post',
-		'has_archive'        => true,
-		'hierarchical'       => false,
-		'menu_position'      => null,
-		'supports'           => array( 'title', 'editor', 'author', 'thumbnail', 'excerpt', 'comments' )
-	);
+	public function __construct() {
+		$this->baseUrl = get_option( 'bootcamp_baseurl_option' );
+		$this->apiKey = get_option( 'bootcamp_apikey_option' );
+	}
 
-	register_post_type( 'bootcamp', $args );
+	public function renderAuthorQuotes() {
+		$authorId = get_query_var( 'author_id' );
+		$response = wp_remote_get( $this->baseUrl.'/author/'.$authorId.'/quotes?apikey='.$this->apiKey );
+
+		if ( is_array( $response ) ) {
+  			$body = $response['body'];
+  			$json = $json_decode( $body, true);
+		}
+	}
 }
 
-function bootcamp_rewrite_flush() {
-    // First, we "add" the custom post type via the above written function.
-    // Note: "add" is written with quotes, as CPTs don't get added to the DB,
-    // They are only referenced in the post_type column with a post entry, 
-    // when you add a post of this CPT.
-    bootcamp_front_init();
-
-    // ATTENTION: This is *only* done during plugin activation hook in this example!
-    // You should *NEVER EVER* do this on every page load!!
-    flush_rewrite_rules();
+function bootcamp_render_author() {
+	$renderer = new BootcampQuotes();
+	return $renderer->renderAuthorQuotes();
 }
-
-register_activation_hook( __FILE__, 'bootcamp_rewrite_flush' );
 
 add_action('admin_enqueue_scripts', 'bootcamp_admin_enqueue');
 add_action('wp_enqueue_scripts', 'bootcamp_front_enqueue');
 add_action('wp_footer', 'add_base_url');
-add_action( 'init', 'bootcamp_front_init' );
+add_action( 'bootcamp_render_author', 'bootcamp_render_author' );
 
