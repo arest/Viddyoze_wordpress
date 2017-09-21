@@ -8,18 +8,20 @@ Version: 0.2
 
 define( 'BOOTCAMP_PLUGIN_VERSION', '0.2' );
 
-add_action('admin_menu', 'bootcamp_setup_menu');
+add_action('admin_menu', 'bootcamp_setup_admin_menu');
 add_option('bootcamp_baseurl_option', 'http://viddyoze.dev/app_dev.php/api');
 add_option('bootcamp_apikey_option', '123456789abcdefghilmnopqrstuvz');
 
 
-function bootcamp_setup_menu(){
-        add_menu_page( 'Bootstrap Plugin Page', 'Bootcamp CRUD', 'manage_options', 'bootstrap-plugin', 'bootcamp_init' );
+
+function bootcamp_setup_admin_menu(){
+        add_menu_page( 'Bootstrap Plugin Page', 'Bootcamp CRUD', 'manage_options', 'bootstrap-plugin', 'bootcamp_admin_init' );
 }
  
 
+function bootcamp_admin_init(){
 
-function bootcamp_init(){
+
         echo '<div id="root"></div>';
         echo '<script type="text/javascript">var baseUrl = "'.get_option('bootcamp_baseurl_option').'";</script>';
         echo '<script type="text/javascript">var apiKey = "'.get_option('bootcamp_apikey_option').'";</script>';
@@ -27,7 +29,8 @@ function bootcamp_init(){
 }
 
 function bootcamp_admin_enqueue($hook) {
-	if (is_admin()) {
+	if (is_admin() && $hook === 'toplevel_page_bootstrap-plugin') {
+
     	wp_enqueue_script('bootcamp_bundle_js', plugin_dir_url(__FILE__) . '/admin/build/static/js/bootcamp_bundle.js', null, BOOTCAMP_PLUGIN_VERSION, true);
     	wp_enqueue_style( 'bootcamp_bundle_css', plugin_dir_url(__FILE__) . '/admin/build/static/css/bootcamp_bundle.css', null, BOOTCAMP_PLUGIN_VERSION, true );
     }
@@ -109,8 +112,8 @@ function add_query_vars_filter( $vars ){
 
 add_filter( 'query_vars', 'add_query_vars_filter' );
 
-add_action('admin_enqueue_scripts', 'bootcamp_admin_enqueue');
 add_action('wp_enqueue_scripts', 'bootcamp_front_enqueue');
+add_action('admin_enqueue_scripts', 'bootcamp_admin_enqueue');
 add_action('wp_footer', 'add_base_url');
 add_action( 'bootcamp_render_author', 'bootcamp_render_author' );
 add_action( 'bootcamp_render_random_quote', 'bootcamp_render_random_quote' );
