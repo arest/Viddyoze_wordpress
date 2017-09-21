@@ -59,12 +59,35 @@ class BootcampQuotes
 	}
 
 	public function renderAuthorQuotes() {
-		$authorId = get_query_var( 'author_id' );
-		$response = wp_remote_get( $this->baseUrl.'/author/'.$authorId.'/quotes?apikey='.$this->apiKey );
+		$authorId = get_query_var('author_id');
+		$url = $this->baseUrl.'/author/'.$authorId.'/quotes';
+		$request = wp_remote_get( $url, [
+			'timeout' => 120,
+			'blocking' => false,
+			'headers'     => [
+				'Accept' => 'application/json'
+			],
+		]);
+
+		if ( is_array( $request ) ) {
+			$json = json_decode( $request['body'], true);
+  			return $json;
+		}
+	}
+
+	public function renderRandomQuote() {
+
+		$url = $this->baseUrl.'/quote/random?apikey='.$this->apiKey;
+		$response = wp_remote_get( $url );
 
 		if ( is_array( $response ) ) {
   			$body = $response['body'];
-  			$json = $json_decode( $body, true);
+  			$json = json_decode( $body, true);
+
+
+  			if (isset($json['content'])) {
+  				echo $json['content'];
+  			}
 		}
 	}
 }
@@ -74,8 +97,22 @@ function bootcamp_render_author() {
 	return $renderer->renderAuthorQuotes();
 }
 
+function bootcamp_render_random_quote() {
+	$renderer = new BootcampQuotes();
+	return $renderer->renderRandomQuote();
+}
+
+function add_query_vars_filter( $vars ){
+  $vars[] = "author_id";
+  return $vars;
+}
+
+add_filter( 'query_vars', 'add_query_vars_filter' );
+
 add_action('admin_enqueue_scripts', 'bootcamp_admin_enqueue');
 add_action('wp_enqueue_scripts', 'bootcamp_front_enqueue');
 add_action('wp_footer', 'add_base_url');
 add_action( 'bootcamp_render_author', 'bootcamp_render_author' );
+add_action( 'bootcamp_render_random_quote', 'bootcamp_render_random_quote' );
+
 
