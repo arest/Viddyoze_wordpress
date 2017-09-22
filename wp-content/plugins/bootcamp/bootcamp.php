@@ -3,10 +3,10 @@
 Plugin Name: Viddyoze Bootcamp
 Description: Viddyoze Bootcamp plugin for retrieving quotes from Symfony app
 Author: Andrea Restello
-Version: 0.3
+Version: 0.6
 */
 
-define( 'BOOTCAMP_PLUGIN_VERSION', '0.3' );
+define( 'BOOTCAMP_PLUGIN_VERSION', '0.6' );
 define( 'BOOTCAMP_PLUGIN_URI', 'bootcamp-plugin' );
 
 add_action('admin_menu', 'bootcamp_setup_admin_menu');

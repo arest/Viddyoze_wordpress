@@ -3,6 +3,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { userLogin } from 'admin-on-rest';
+import queryString from 'query-string';
 import RaisedButton from 'material-ui/RaisedButton';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import {Card, CardHeader, CardText} from 'material-ui/Card';
@@ -16,7 +17,9 @@ class MyLoginPage extends Component {
     }
 
     componentDidMount = function() {
-        var access_token = window.location.search.split('access_token=')[1];
+        const parsedHash = queryString.parse(window.location.search);
+        console.log(parsedHash);
+        var access_token = parsedHash['access_token'];
 
         if( access_token ) {
             const credentials = { access_token };

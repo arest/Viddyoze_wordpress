@@ -10,7 +10,7 @@ import authClient from './authClient';
 import MyLoginPage from './loginPage';
 
 const httpClient = (url, options = {}) => {
-    if (!options.headers) {
+    if (!options.headers) {    
         options.headers = new Headers({ Accept: 'application/json' });
     }
     const token = localStorage.getItem('token');
