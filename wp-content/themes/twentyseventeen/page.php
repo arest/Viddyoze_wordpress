@@ -34,6 +34,24 @@ get_header(); ?>
 			endwhile; // End of the loop.
 			?>
 
+			<?php if (false && is_page('bootcamp-author-details')): ?>
+				<?php $author = do_action('bootcamp_render_author') ?>
+				<?php if ($author): ?>
+					
+				<article>
+					<div class="entry-content">
+						<h1>Php Approch</h1>
+						<h3><?php echo $author['firstName'] ?> <?php echo $author['lastName'] ?></h3>
+						<?php foreach ($author['quotes'] as $quote): ?>
+							<p>
+								<?php echo $quote['content'] ?>
+							</p>
+						<?php endforeach ?>
+					</div>
+				</article>
+				<?php endif ?>
+			<?php endif ?>
+
 		</main><!-- #main -->
 	</div><!-- #primary -->
 </div><!-- .wrap -->
